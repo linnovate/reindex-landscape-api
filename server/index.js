@@ -1,23 +1,17 @@
+module.exports = (function() {
+  'use strict';
+  var router = require('express').Router(),
+    passport = require('passport'),
+    requireAuth = passport.authenticate('jwt', { session: false }),
+    landscapesCtrl = require('./controller');  
+//   //   authCtrl = require('../controllers/auth');
 
-'use strict';
+  router.route('/')
+    .get(landscapesCtrl.all)  
+    .post(requireAuth, landscapesCtrl.create);//, authCtrl.roleAuthorization('Admin')
+  router.route('/:landscapeId')
+    .get(landscapesCtrl.get)
+    .put(requireAuth, landscapesCtrl.update);//, authCtrl.roleAuthorization('Admin')
 
-var express = require('express'),
-  passport = require('passport'),
-  requireAuth = passport.authenticate('jwt', { session: false }),
-  router = express.Router(),
-  
-  landscapesCtrl = require('./controller');  
-//   authCtrl = require('../controllers/auth');
-
-/*
- Landscape functions
- */
-router.route('/landscape')
-  .get(landscapesCtrl.all)  
-  .post(requireAuth, landscapesCtrl.create);//, authCtrl.roleAuthorization('Admin')
-router.route('/landscape/:landscapeId')
-  .get(landscapesCtrl.get)
-  .put(requireAuth, landscapesCtrl.update);//, authCtrl.roleAuthorization('Admin')
-
-
-module.exports = router;
+  return router;
+})();
