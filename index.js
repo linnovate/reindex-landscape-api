@@ -1,2 +1,2 @@
 const server = require('./server');
-module.exports = client
+module.exports = server
